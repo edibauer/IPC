@@ -105,4 +105,63 @@ Different types od data load:
 2. Flat file to table
 3. Table to flat file
 
+### Flat file to table
++ Add file name column in the flat table
+![alt text](image-1.png)
+
++ We need to add an expression transformation
+![alt text](image-2.png)
+
++ In the new transformation, add a new column for the file name, change params and click on EXPRESSIONS:
+![alt text](image-3.png)
+
++ Put a date metadata in file with itst respective format (double click to insert standard fn)
+```bash
+'T_FF_Employees'||TO_CHAR(SYSTIMESTAMP(), 'MMDDYYYYHH24MISS')||'.csv'
+```
+![alt text](image-4.png)
+
+* This example is only for add a current timestamp to the flat file (table to flat file):
+![alt text](image-5.png)
+
+### Flat file to table
+#### In Source
++ Create a csv file (we nedd to add it in SrcFiles into Informatica folder)
++ In `Sources`, we click on `Import from File`
+
+![alt text](image-6.png)
+![alt text](image-7.png)
+![alt text](image-8.png)
+
+![alt text](image-9.png)
+
+#### In Target
++ Add the EMPLOYEES table
+![alt text](image-10.png)
+
+#### In Mapping
++ Create a new mapping
++ Add Source file and target
+![alt text](image-11.png)
+
++ We need to provide date format from the flat file
+![alt text](image-12.png)
+
+#### In workflow
++ Create a new workflow
+![alt text](image-13.png)
+![alt text](image-14.png)
+
++ It's important to change date format at the moment to load files
++ Change to the TGT in the wh mapping
+
+### What is Active and Passive transformation in informatica
+
+
+
+
+
+
+
+
 
