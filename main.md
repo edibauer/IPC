@@ -156,6 +156,105 @@ Different types od data load:
 + Change to the TGT in the wh mapping
 
 ### What is Active and Passive transformation in informatica
++ Active: A trnasformation does change the number of records passed through it
++ Passive: A transformtaion does not chenge the number of records passed through it
+  
+
+### Source Qualifier Transformation in informatica
+- An active, connected
+    It converts source datatype into Informatica native data type
+
+- Properties:
+
+```SQL
+SELECT all_columns FROM table_name;
+```
+
+1. SQL query: SQL override, -- by writing sql qery, we can filter, restrcit the data from source itself -- 2
+
+2. User defined join: Homogeneus join -- tables from same type od DB
+
+3. Source filter: Filter condition (salary is not null)
+
+4. Select distinct: enable/disable
+
+5. Pre-SQL: SQL, before data fetch (ex. index creation in source)
+
+6. Post-SQL: SQL, after data fetch (ex. index drop in source)
+
+![alt text](image.png)
+
+![alt text](image-1.png)
+- Save mapping
+- Refresh Workflow and save it
+
++ We can view the query in the Workflow task session:
+![alt text](image-2.png)
+
+#### Using Source Filter
+![alt text](image-3.png)
+
+#### Using Number of Sorted Ports
+![alt text](image-4.png)
+
+This one uses the following command:
+```sql
+ORDER BY 1
+ORDER BY 1, 2
+
+SELECT EMPLOYEES.EMPLOYEE_ID, EMPLOYEES.FIRST_NAME, EMPLOYEES.LAST_NAME, EMPLOYEES.EMAIL, EMPLOYEES.PHONE_NUMBER, EMPLOYEES.HIRE_DATE, EMPLOYEES.JOB_ID, EMPLOYEES.SALARY, EMPLOYEES.COMMISSION_PCT, EMPLOYEES.MANAGER_ID, EMPLOYEES.DEPARTMENT_ID FROM EMPLOYEES ORDER BY EMPLOYEES.EMPLOYEE_ID
+
+```
+
+![alt text](image-5.png)
+
+#### Join Defined
+![alt text](image-6.png)
+
+- We need to add DEPARTMENTS table in sources
+- We need to create table T_EMPLOYEES_DEPT
+```sql
+CREATE TABLE T_EMPLOYEES_DEPT AS SELECT * FROM T_EMPLOYEES WHERE 1=2;
+
+ALTER TABLE T_EMPLOYEES_DEPT
+ADD (
+    DEPARTMENT_NAME VARCHAR2(60),
+    LOCATION_ID NUMBER(4)
+);
+```
+- Then, we need to add two source tables into only one Source Qualifier. Take columns of DEPARTMENTS and put it on Source Qualifier
+![alt text](image-7.png)
+
+- Do the join:
+![alt text](image-8.png)
+
+- Create Workflow and run it.
+- LEFT OUTER JOIN:
+```bash
+EMPLOYEES.DEPARTMENT_ID=DEPARTMENTS.DEPARTMENT_ID(+)
+
+```
+#### Working with Source Filter
+![alt text](image-9.png)
+
+#### Select Distinct columns for a table
+- We need to specificate the source table name ad select distinct
+![alt text](image-10.png)
+![alt text](image-11.png)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
