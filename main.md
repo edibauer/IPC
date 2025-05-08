@@ -242,6 +242,159 @@ EMPLOYEES.DEPARTMENT_ID=DEPARTMENTS.DEPARTMENT_ID(+)
 ![alt text](image-10.png)
 ![alt text](image-11.png)
 
+### Filter Transformation in informatica
+An Active, connected
+
+SQ Filter: source itself
+
+Filter transformation is used to filter out record any where in the pipeline
+Properties:
+Filter condition:
+- True: It will pass all the record
+- False: It will block all the record
+- Condition: passes --- satisfied record
+
+#### Ex.
+```sql
+100
+200
+300
+null --- not because is null (salary)
+400
+500
+600
+```
+#### Ex.
+I have a Flat File and it has record for all the countries, i want to load india's data
+
+- When we use a FF, all the SQ options are disabled
+
+```sql
+s + sq + filter (country='India' AND salary > 50000)
+-- India
+-- india
+-- INDIA
+
+s + sq + filter (lower(country)='india' AND salary > 50000)
+```
+
+- Select filter transformation on the transformation tools area and relate all the columns
+![alt text](image-12.png)
+
+- Click on the current table created, put the sentence and click on validate
+![alt text](image-13.png)
+
+- Create workflow, change to the target table, save and run
+![alt text](image-14.png)
+
+- Adding new filter conditions (AND)
+![alt text](image-15.png)
+
+### Expression Transformation in Informatica
+![alt text](image-16.png)
+
+- Passive, connected
+- Business Logic
+
+||input|output|variable|expression(not a port)|
+|---|---|---|---|---|
+|salary|*|*|||
+|new salary||*||salary+(salary*0.1)|
+
+```bash
+variable: intermediate calculation -- you cant take variable port as output
+
+v_c = a + b
+o_c = v_c
+e = d + v_c
+
+```
+- Order of execution
+1. Input
+2. Variable
+3. Output
+
+Can't filter record in expression trnasformation
+```bash
+if salary <= 5000 --- 30%
+
+if salary > 5000 and <= 10000 --- 20%
+
+if salary > 10000 --- 10%
+```
+
+- Do a new mapping and select expression transformation in the toolbar
+![alt text](image-17.png)
+
+- We need to create a new port (column) with its data type and length and set the new one like `output` and the original port must be setted like `input`. Then, we need to modify the expression
+![alt text](image-18.png)
+
+![alt text](image-19.png)
+
+![alt text](image-20.png)
+
+- Then, we nedd to join with the target table. The original port(column) has not output, whereas the new one hat output. We need to join this one with the target only
+![alt text](image-21.png)
+
+```sql
+IIF(condition, true, false)
+
+IIF(SALARY <= 10000, SALARY + (SALARY * 0.2), SALARY + (SALARY * 0.1))
+```
+
+![alt text](image-22.png)
+
+```sql
+if salary <= 5000 --- 30%
+if salary > 5000 and <= 10000 --- 20%
+if salary > 10000 --- 10%
+
+IIF(SALARY <= 5000, SALARY + (SALARY * 0.3), IIF(SALARY > 5000 AND SALARY <= 10000 , SALARY + (SALARY * 0.2), SALARY + (SALARY * 0.1)))
+
+```
+#### Main Exercise
+```bash
+first_name --- UPERCASE
+last_name --- 100_king (EMPLOYEE_ID_LAST_NAME)
+email --- salary > 10000 then email@gmail.com
+                <= 10000 then email@yahoo.com
+
+phone_number 515.123.4567 --- +1-5151234567
+job_id --- from 4th char PRES
+comm --- null --- 0
+Hire_Date --- leap year
+
+```
+#### FIRST_NAME
+![alt text](image-23.png)
+
+#### LAST_NAME
+![alt text](image-24.png)
+
+#### EMAIL
+![alt text](image-25.png)
+
+#### PHONE NUMBER
+![alt text](image-26.png)
+
+#### LEAP YEAR
+![alt text](image-27.png)
+
+#### COMMISSION_PCT
+![alt text](image-28.png)
+
+- Updatting th mapping
+![alt text](image-29.png)
+
+#### Evaluation Errors
+![alt text](image-30.png)
+![alt text](image-31.png)
+
+
+
+
+
+
 
 
 
