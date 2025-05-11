@@ -97,7 +97,7 @@ FROM EMPLOYEES; # IN HR
 * Session log
 
 ### NOM
-![alt text](image.png)
+![alt text](/img/image.png)
 
 ### Informatica Table to Flat File load
 Different types od data load:
@@ -107,50 +107,50 @@ Different types od data load:
 
 ### Flat file to table
 + Add file name column in the flat table
-![alt text](image-1.png)
+![alt text](/img/image-1.png)
 
 + We need to add an expression transformation
-![alt text](image-2.png)
+![alt text](/img/image-2.png)
 
 + In the new transformation, add a new column for the file name, change params and click on EXPRESSIONS:
-![alt text](image-3.png)
+![alt text](/img/image-3.png)
 
 + Put a date metadata in file with itst respective format (double click to insert standard fn)
 ```bash
 'T_FF_Employees'||TO_CHAR(SYSTIMESTAMP(), 'MMDDYYYYHH24MISS')||'.csv'
 ```
-![alt text](image-4.png)
+![alt text](/img/image-4.png)
 
 * This example is only for add a current timestamp to the flat file (table to flat file):
-![alt text](image-5.png)
+![alt text](/img/image-5.png)
 
 ### Flat file to table
 #### In Source
 + Create a csv file (we nedd to add it in SrcFiles into Informatica folder)
 + In `Sources`, we click on `Import from File`
 
-![alt text](image-6.png)
-![alt text](image-7.png)
-![alt text](image-8.png)
+![alt text](/img/image-6.png)
+![alt text](/img/image-7.png)
+![alt text](/img/image-8.png)
 
-![alt text](image-9.png)
+![alt text](/img/image-9.png)
 
 #### In Target
 + Add the EMPLOYEES table
-![alt text](image-10.png)
+![alt text](/img/image-10.png)
 
 #### In Mapping
 + Create a new mapping
 + Add Source file and target
-![alt text](image-11.png)
+![alt text](/img/image-11.png)
 
 + We need to provide date format from the flat file
-![alt text](image-12.png)
+![alt text](/img/image-12.png)
 
 #### In workflow
 + Create a new workflow
-![alt text](image-13.png)
-![alt text](image-14.png)
+![alt text](/img/image-13.png)
+![alt text](/img/image-14.png)
 
 + It's important to change date format at the moment to load files
 + Change to the TGT in the wh mapping
@@ -182,20 +182,20 @@ SELECT all_columns FROM table_name;
 
 6. Post-SQL: SQL, after data fetch (ex. index drop in source)
 
-![alt text](image.png)
+![alt text](/img2/image.png)
 
-![alt text](image-1.png)
+![alt text](/img2/image-1.png)
 - Save mapping
 - Refresh Workflow and save it
 
 + We can view the query in the Workflow task session:
-![alt text](image-2.png)
+![alt text](/img2/image-2.png)
 
 #### Using Source Filter
-![alt text](image-3.png)
+![alt text](/img2/image-3.png)
 
 #### Using Number of Sorted Ports
-![alt text](image-4.png)
+![alt text](/img2/image-4.png)
 
 This one uses the following command:
 ```sql
@@ -206,10 +206,10 @@ SELECT EMPLOYEES.EMPLOYEE_ID, EMPLOYEES.FIRST_NAME, EMPLOYEES.LAST_NAME, EMPLOYE
 
 ```
 
-![alt text](image-5.png)
+![alt text](/img2/image-5.png)
 
 #### Join Defined
-![alt text](image-6.png)
+![alt text](/img2/image-6.png)
 
 - We need to add DEPARTMENTS table in sources
 - We need to create table T_EMPLOYEES_DEPT
@@ -223,10 +223,10 @@ ADD (
 );
 ```
 - Then, we need to add two source tables into only one Source Qualifier. Take columns of DEPARTMENTS and put it on Source Qualifier
-![alt text](image-7.png)
+![alt text](/img2/image-7.png)
 
 - Do the join:
-![alt text](image-8.png)
+![alt text](/img2/image-8.png)
 
 - Create Workflow and run it.
 - LEFT OUTER JOIN:
@@ -235,12 +235,12 @@ EMPLOYEES.DEPARTMENT_ID=DEPARTMENTS.DEPARTMENT_ID(+)
 
 ```
 #### Working with Source Filter
-![alt text](image-9.png)
+![alt text](/img2/image-9.png)
 
 #### Select Distinct columns for a table
 - We need to specificate the source table name ad select distinct
-![alt text](image-10.png)
-![alt text](image-11.png)
+![alt text](/img2/image-10.png)
+![alt text](/img2/image-11.png)
 
 ### Filter Transformation in informatica
 An Active, connected
@@ -279,19 +279,19 @@ s + sq + filter (lower(country)='india' AND salary > 50000)
 ```
 
 - Select filter transformation on the transformation tools area and relate all the columns
-![alt text](image-12.png)
+![alt text](/img2/image-12.png)
 
 - Click on the current table created, put the sentence and click on validate
-![alt text](image-13.png)
+![alt text](/img2/image-13.png)
 
 - Create workflow, change to the target table, save and run
-![alt text](image-14.png)
+![alt text](/img2/image-14.png)
 
 - Adding new filter conditions (AND)
-![alt text](image-15.png)
+![alt text](/img2/image-15.png)
 
 ### Expression Transformation in Informatica
-![alt text](image-16.png)
+![alt text](/img2/image-16.png)
 
 - Passive, connected
 - Business Logic
@@ -324,17 +324,17 @@ if salary > 10000 --- 10%
 ```
 
 - Do a new mapping and select expression transformation in the toolbar
-![alt text](image-17.png)
+![alt text](/img2/image-17.png)
 
 - We need to create a new port (column) with its data type and length and set the new one like `output` and the original port must be setted like `input`. Then, we need to modify the expression
-![alt text](image-18.png)
+![alt text](/img2/image-18.png)
 
-![alt text](image-19.png)
+![alt text](/img2/image-19.png)
 
-![alt text](image-20.png)
+![alt text](/img2/image-20.png)
 
 - Then, we nedd to join with the target table. The original port(column) has not output, whereas the new one hat output. We need to join this one with the target only
-![alt text](image-21.png)
+![alt text](/img2/image-21.png)
 
 ```sql
 IIF(condition, true, false)
@@ -342,7 +342,7 @@ IIF(condition, true, false)
 IIF(SALARY <= 10000, SALARY + (SALARY * 0.2), SALARY + (SALARY * 0.1))
 ```
 
-![alt text](image-22.png)
+![alt text](/img2/image-22.png)
 
 ```sql
 if salary <= 5000 --- 30%
@@ -366,29 +366,148 @@ Hire_Date --- leap year
 
 ```
 #### FIRST_NAME
-![alt text](image-23.png)
+![alt text](/img2/image-23.png)
 
 #### LAST_NAME
-![alt text](image-24.png)
+![alt text](/img2/image-24.png)
 
 #### EMAIL
-![alt text](image-25.png)
+![alt text](/img2/image-25.png)
 
 #### PHONE NUMBER
-![alt text](image-26.png)
+![alt text](/img2/image-26.png)
 
 #### LEAP YEAR
-![alt text](image-27.png)
+![alt text](/img2/image-27.png)
 
 #### COMMISSION_PCT
-![alt text](image-28.png)
+![alt text](/img2/image-28.png)
 
 - Updatting th mapping
-![alt text](image-29.png)
+![alt text](/img2/image-29.png)
 
 #### Evaluation Errors
-![alt text](image-30.png)
-![alt text](image-31.png)
+![alt text](/img2/image-30.png)
+![alt text](/img2/image-31.png)
+
+### Joiner Transformation
+![alt text](/img3/image.png)
+![alt text](/img3/image-1.png)
+
+- Cick on Joiner Transformation in Mapping toolbar. Automatically identifies details and master itself
+![alt text](/img3/image-4.png)
+
+- We need to add a new condition and select the relationship bettween master and detail
+![alt text](/img3/image-2.png)
+
+- In properties section, wen need to set de join type
+![alt text](/img3/image-3.png)
+
+- The we need to make the relationship between source and target tables
+![alt text](/img3/image-5.png)
+
+#### Workflow
+- Create a mapping, set target, save and run
+
+#### Doing a Master Outer Join
+![alt text](/img3/image-6.png)
+
+### Sorter Transformation
+- An active, connected
+
+```sql
+SELECT * FROM EMPLOYEES ORDER BY SALARY
+SELECT * FROM EMPLOYEES ORDER BY SALARY DESC
+SELECT * FROM EMPLOYEES ORDER BY SALARY DESC, HIRE_DATE
+```
+
+||input|output|key|direction|
+|---|---|---|---|---|
+|salary|*|*|*|descending|
+|hire_date|*|*|*|ascending|
+
+- We can seelct more than one key port in sorter
+
+#### Example
+- We need to add a Sorter Transformation. This on e is on transformation toolbar. All the soruce clumns must be aggregated.
+![alt text](/img3/image-7.png)
+
+- Double clikc on created table currently. On `port` section we need to check key property and set the direction
+![alt text](/img3/image-8.png)
+
+- Case sensitive
+```sql
+Arun
+Babu
+babu
+Chandra
+```
+- On `Properties` section, we can set case sentitive, distinct or Null treatment
+![alt text](/img/image-9.png)
+
+#### Adding another sorter (hire_date)
+![alt text](/img3/image-10.png)
+
+- We can use sorter transformation to select ditinct values on a flat file
+- We can move the port position in the sorter tansformation table to sort first by salary and the by hire_date
+![alt text](/img3/image-11.png)
+
+### Aggregator Transformation
+- An active, connected
+
+```sql
+min()
+max()
+sum()
+avg()
+count()
+
+```
+- Irrespective of number of record:
+1. Yoi wil get onlye one record in output
+2. Last recor will get aggregate value
+
+#### Example
+```sql
+SELECT 
+    SUM(SALARY)
+FROM DUMMY
+```
+
+- Add a new mapping
+- Add a aggregator transformation table. This one is in transformations toolbar:
+![alt text](/img3/image-12.png)
+
+- Double click un the current created table, go to `ports` section and create a new Port like `Output`. Then, set formal `expression`:
+![alt text](/img3/image-13.png)
+
+- We create the workflow, save and run it
+
+- Then, we need to add `group by` specification
+![alt text](/img3/image-14.png)
+
+```sql
+-- sql
+-- ...
+GROUP BY DEPARTMENT_ID
+HAVING
+```
+- To make a `HAVING` clause, we need to add a filter in Mapping
+![alt text](/img3/image-15.png)
+
+#### Sorting + Aggregation
+- When we check `sorted input`, the system sort all the columns by grouped column:
+![alt text](/img3/image-16.png)
+
+- In this case, workflow will fail becasuse we need to set the sorter type, which can be ascendig or descending
+![alt text](image-17.png)
+
+
+
+
+
+
+
 
 
 
