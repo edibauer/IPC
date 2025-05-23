@@ -935,6 +935,312 @@ CREATE TABLE T_EMPLOYEES_DEPT_LOC (
 - Then, add new source and target tables and make the mapping just like this:
 ![alt text](/img4/image-34.png)
 
+### Unconnected Lookup Transformations
+![alt text](/img5/image.png)
+
+- First, we need to add source, target and expression transformation tables. Then, in the `expression transformation` we add two new ports and uncheck input property:
+![alt text](/img5/image-1.png)
+
+- In the `Expression editor`, we need to add tbe following expression `:LKP.LKPTRANS(DEPARTMENT_ID)` into the currenty created ports
+![alt text](/img5/image-2.png)
+![alt text](/img5/image-3.png)
+
+- After that, we need to add Lookup Tables with the following configuration:
+![alt text](/img5/image-4.png)
+![alt text](/img5/image-5.png)
+
+![alt text](/img5/image-6.png)
+![alt text](/img5/image-7.png)
+
+#### RES
+![alt text](/img5/image-8.png)
+
+### Return multiple columns from Unconnected Lookup
+
+
+### Why lookup is an active transformation, lookup policy on multiple match
+
+
+### What is the difference between lookup and Joiner transformation
+
+
+### Update strategy Transformation in Informatica, SCD type 1 in informatica
+- An active, connected
+- DD (data driven):
+    1. dd_insert 0
+    2. dd_update 1
+    3. dd_delete 2 (instead of delete, we will soft delete)
+    4. dd_reject 3
+
+- Target --- primary key
+
+![alt text](/img5/image-9.png)
+
+#### Example
+```sql
+-- In HR DB
+CREATE TABLE S_CUSTOMER_UPD (
+    CUST_ID NUMBER,
+    CUST_NAME VARCHAR2(30 BYTE),
+    EMAIL_ID VARCHAR2(50 BYTE),
+    MOBILE_NO NUMBER(10,0),
+    CITY VARCHAR2(30 BYTE),
+    COUNTRY VARCHAR2(30 BYTE)
+) 
+
+-- In CORE DB
+CREATE TABLE T_CUSTOMER_UPD (
+    CUST_ID NUMBER,
+    CUST_NAME VARCHAR2(30 BYTE),
+    EMAIL_ID VARCHAR2(50 BYTE),
+    MOBILE_NO NUMBER(10,0),
+    CITY VARCHAR2(30 BYTE),
+    COUNTRY VARCHAR2(30 BYTE)
+) 
+
+INSERT INTO S_CUSTOMER_UPD
+VALUES (1002, 'edibauer', 'email1@gamil.com', '1234567890', 'city1', 'India');
+
+INSERT INTO S_CUSTOMER_UPD
+VALUES (1001, 'name2', 'email2@gamil.com', '7878787878', 'city2', 'India');
+
+INSERT INTO S_CUSTOMER_UPD
+VALUES (1003, 'name3', 'email3@gamil.com', '5656565656', 'city3', 'India');
+
+INSERT INTO S_CUSTOMER_UPD
+VALUES (1004, 'name4', 'email4@gamil.com', '9898989898', 'city4', 'India');
+
+
+```
+- First, we need to add source and target tables. Then, we need to create a mapping with `Expression Transformation` and `Lookup Transformation`. Lookup table must be on target table.
+![alt text](/img5/image-10.png)
+![alt text](/img5/image-11.png)
+
+- After that, we need to change `Expression Transformation` properties and add 2 new `ports`. These must be `insert_flag` and `update_flag`
+![alt text](/img5/image-12.png)
+
+- Insert
+![alt text](/img5/image-13.png)
+
+```bash
+IIF(ISNULL(lkp_CUST_ID1), TRUE, FALSE)
+```
+
+- Update
+![alt text](/img5/image-14.png)
+
+```bash
+IIF(CUST_ID = lkp_CUST_ID1 AND (CUST_NAME != lkp_CUST_NAME1 OR EMAIL_ID != lkp_EMAIL_ID1 OR MOBILE_NO != lkp_MOBILE_NO1 OR CITY != lkp_CITY1 OR COUNTRY != lkp_COUNTRY1), TRUE, FALSE)
+```
+- Add `Router Transfomration`
+![alt text](/img5/image-15.png)
+![alt text](/img5/image-16.png)
+
+- Add `Update Strategy Transformation`
+```sql
+dd_update
+-- IIF(flag=1, dd_update, dd_insert)
+```
+![alt text](/img5/image-17.png)
+
+- Create a copy of the target table and do the relationship with `Update Strategy`
+![alt text](/img5/image-18.png)
+
+#### Workflow
+- Same configuration like others (dont check tuncate in target tables)
+
+#### RES
+![alt text](/img5/image-19.png)
+
+#### Changing values
+- Change any value from Email column
+- To re-run workflow task, we need to choose it on Monitoring view and click `Restart Workflow from Task`
+
+### Normalizer
+- An active, connected transformation
+row --- column
+- Transpose the data (SQL: pivot unpivot)
+- Cobol Source --- VSAM file --- Instead of SQ, Normalizer will be used
+- `GK` - Generated key value
+- `GC ID` - Generadted column value
+
+#### Example
+- First, we need to create all the tables
+
+```sql
+-- In HR DB
+CREATE TABLE S_STUDENT_NRM (
+    STUD_ID NUMBER,
+    STUD_NAME VARCHAR2(127),
+    MATHS NUMBER,
+    PHYSICS NUMBER,
+    CHEMISTRY NUMBER,
+    BIOLOGY NUMBER
+)
+
+-- In CORE DB
+CREATE TABLE T_STUDENT_NRM (
+    STUD_ID NUMBER,
+    STUD_NAME VARCHAR2(127),
+    MARKS NUMBER,
+    SUBJECT VARCHAR2(127),
+    GK_ID NUMBER,
+    GC_ID NUMBER
+)
+
+-- Insert data into table (HR schema)
+INSERT INTO S_STUDENT_NRM
+VALUES (1000, 'Arun', 87, 98, 93, 84);
+
+INSERT INTO S_STUDENT_NRM
+VALUES (1001, 'Kannan', 83, 82, 96, 91);
+
+INSERT INTO S_STUDENT_NRM
+VALUES (1002, 'Babu', 93, 90, 88, 80);
+
+INSERT INTO S_STUDENT_NRM
+VALUES (1003, 'Ramesh', 90, 92, 81, 98);
+
+```
+
+- Then, we need to add source and target tables. After all, add normalizer transformation (we cant drag and drop columns no normlizer transformation)
+![alt text](/img5/image-20.png)
+
+- Next, we have to add on ly the column references
+![alt text](/img5/image-21.png)
+![alt text](/img5/image-22.png)
+
+#### Workflow
+
+#### Add subject info (only get top ranks)
+- First, we need to add `Rank Transformation` and make changes into this one
+![alt text](/img5/image-23.png)
+![alt text](/img5/image-24.png)
+
+### Transaction Control Transformation
+- An acive, connected
+- Dynamic file in target
+
+1. SQL: 
+    commit/ rollback
+
+2. Informatica:
+    TC_COMMIT_BEFORE
+    TC_COMMIT_AFTER
+    TC_ROLLBACK_BEFORE
+    TC_ROLLBACK_AFTER
+    TC_CONTINUE_TRANSACTION (default)
+
+Dynamic file in target
+
+![alt text](/img5/image-25.png)
+
+### JAVA Transformation
+- Provides a simple, native programming interface to define transformation functionality with the java programming language
+
+- If active, the transformation can generate more the one output row for each input row
+- If pasive, the transformation generates one output row for each input row
+
+#### Example
+- First, we need to add source and target table
+```sql
+-- In HR DB
+CREATE TABLE S_CUSTOMER_JAVA (
+    CUST_ID NUMBER,
+    CUST_NAME VARCHAR2(127),
+    CUST_DOB DATE,
+    MOBILE_NUMBER VARCHAR2(255)
+)
+
+-- In CORE DB
+CREATE TABLE T_CUSTOMER_JAVA (
+    CUST_ID NUMBER,
+    CUST_NAME VARCHAR2(127),
+    CUST_DOB DATE,
+    MOBILE_NUMBER NUMBER
+)
+
+INSERT INTO S_CUSTOMER_JAVA
+VALUES (1000, 'Arun Kumar', '13-10-2010', '9090909090~8989898989~8975630134')
+
+INSERT INTO S_CUSTOMER_JAVA
+VALUES (1001, 'John Peter', '10-10-2006', '8080808080~8989898989~5544810680~7984650921')
+
+```
+- Then, we need to add `JAVA Transformation` as an active one and make configurations
+![alt text](/img5/image-26.png)
+
+![alt text](/img5/image-27.png)
+
+- After that, enter java code and clip on compile:
+![alt text](/img5/image-28.png)
+
+```java
+String str = mobile_numbers;
+String [] tmp;
+String delimiter = "~";
+
+tmp = str.split(delimiter);
+
+for (int i = 0; i < tmp.length ; i++ ) {
+	o_cust_id = cust_id;
+	o_cust_name = cust_name;
+	o_dob = dob;
+	o_mobile = tmp[i];
+
+	generateRow();
+}
+
+```
+
+### SQL Transformation
+- An active, connected
+- Instead of joiner, lookup
+
+SQL Transformation is used to process SQL queries in the mistream of pipeline
+We can insert, update, delete and retrieve rows from database at runtime using SQL transformation
+
+The following SQL statements an be used in the SQL transformtaion
+
+Data definition Statements (CREATE, ALTER, DROP, TRUNCATE, RENAME)
+Data manipulation statements (INSERT, UPDATE, DELETE, MERGE)
+Data retrieval statement (SELECT)
+Data Control Language Statements (GRANT, REVOKE)
+Transaction Control Statements (COMMIT, ROLLBACK)
+
+- Add all the column data type and set query
+
+```sql
+
+SELECT DEPARTMENT_NAME, LOCATION_ID
+FROM DEPARTMENTS
+WHERE DEPARTMENT_ID = ?DEPARTMENT_ID? 
+
+```
+![alt text](/img5/image-29.png)
+
+#### Workflow
+![alt text](/img5/image-30.png)
+![alt text](/img5/image-31.png)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
